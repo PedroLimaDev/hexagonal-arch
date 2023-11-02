@@ -13,9 +13,10 @@ const migrationsDir = resolve(
 const entitiesDir = resolve(
   __dirname,
   '..',
+  'modules',
   '**',
   'entities',
-  '*.entity{.ts,.js}',
+  '*.model{.ts,.js}',
 );
 
 export const dataSource = new DataSource({

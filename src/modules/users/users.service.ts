@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+import { UserGatewayInterface } from './gateways/user-gateway-interface';
+import { User } from './entities/user.entity';
+import EventEmitter from 'events';
+
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @Inject('UserPersistenceGateway')
+    private userPersistenceGateway: UserGatewayInterface,
+    @Inject('UserIntegrationGateway')
+    private userIntegrationGateway: UserGatewayInterface,
+    @Inject('EventEmitter')
+    private eventEmitter: EventEmitter,
+  ) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const user = new User(createUserDto.name);
+    await this.userPersistenceGateway.create(user);
+    await this.userIntegrationGateway.create(user);
+    return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findAll() {
+    return this.userPersistenceGateway.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findById(id: string) {
+    const user = this.userPersistenceGateway.findById(id);
+
+    if (!user) throw new Error('User not found');
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: string, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
+  async remove(id: string) {
     return `This action removes a #${id} user`;
   }
 }

@@ -1,8 +1,9 @@
-import BaseEntityModel from '../../utils/entity-base/base-entity.entity';
-import { Column, Entity } from 'typeorm';
-
-@Entity()
-export class User extends BaseEntityModel {
-  @Column()
+export class User {
+  id: string;
   name: string;
+
+  constructor(name: string, id?: string) {
+    this.id = id;
+    this.name = name;
+  }
 }
