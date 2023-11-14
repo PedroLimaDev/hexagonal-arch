@@ -13,7 +13,7 @@ export class UserGatewayHttp implements UserGatewayInterface {
 
   async create(user: User): Promise<User> {
     await lastValueFrom(
-      this.httpService.post('lists', {
+      this.httpService.post('users', {
         name: user.name,
       }),
     );

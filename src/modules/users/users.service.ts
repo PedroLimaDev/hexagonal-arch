@@ -5,14 +5,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserGatewayInterface } from './gateways/user-gateway-interface';
 import { User } from './entities/user.entity';
 import EventEmitter from 'events';
+import { UserCreatedEvent } from './events/user-created.event';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('UserPersistenceGateway')
     private userPersistenceGateway: UserGatewayInterface,
-    @Inject('UserIntegrationGateway')
-    private userIntegrationGateway: UserGatewayInterface,
     @Inject('EventEmitter')
     private eventEmitter: EventEmitter,
   ) {}
@@ -20,7 +19,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const user = new User(createUserDto.name);
     await this.userPersistenceGateway.create(user);
-    await this.userIntegrationGateway.create(user);
+    this.eventEmitter.emit('user.created', new UserCreatedEvent(user));
     return user;
   }
 
