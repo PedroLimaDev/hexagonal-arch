@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
-import { LocationService } from './location.service';
-import { LocationController } from './location.controller';
-import { LocationModel } from './entities/location.model';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HttpModule } from '@nestjs/axios';
+
+import { LocationModel } from './entities/location.model';
+import { LocationController } from './location.controller';
+import { LocationService } from './location.service';
+
+import { LocationGatewayTypeorm } from './gateways/location-gateway-typeorm';
+import { LocationGatewayHttp } from './gateways/location-gateway-http';
 
 @Module({
   imports: [

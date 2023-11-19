@@ -24,13 +24,15 @@ export class CompanyGatewayHttp implements CompanyGatewayInterface {
     const { data } = await lastValueFrom(
       this.httpService.get<any[]>('companies'),
     );
-    return data.map((d) => new Company(d.name, d.id));
+    return data.map(
+      (d) => new Company(d.name, d.website, d.cnpj, d.user, d.id),
+    );
   }
 
   async findById(id: string): Promise<Company> {
     const { data } = await lastValueFrom(
       this.httpService.get<any>(`companies/${id}`),
     );
-    return new Company(data.name, data.id);
+    return new Company(data.name, data.website, data.cnpj, data.user, data.id);
   }
 }

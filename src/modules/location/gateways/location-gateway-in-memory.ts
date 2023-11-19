@@ -2,7 +2,7 @@ import { Location } from '../entities/location.entity';
 import { LocationGatewayInterface } from './location-gateway-interface';
 import { v4 as uuidv4 } from 'uuid';
 
-export class UserGatewayInMemory implements LocationGatewayInterface {
+export class LocationGatewayInMemory implements LocationGatewayInterface {
   items: Location[] = [];
   async create(location: Location): Promise<Location> {
     location.id = uuidv4();

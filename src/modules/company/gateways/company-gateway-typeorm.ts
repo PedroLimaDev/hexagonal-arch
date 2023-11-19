@@ -17,10 +17,7 @@ export class CompanyGatewayTypeorm implements CompanyGatewayInterface {
   }
 
   async findAll(): Promise<Company[]> {
-    const companysModels = await this.companyModel.find();
-    return companysModels.map(
-      (companyModel) => new Company(companyModel.name, companyModel.id),
-    );
+    return await this.companyModel.find();
   }
 
   async findById(id: string): Promise<Company> {
@@ -28,6 +25,6 @@ export class CompanyGatewayTypeorm implements CompanyGatewayInterface {
     if (!companyModel) {
       throw new Error('Company not found');
     }
-    return new Company(companyModel.name, companyModel.id);
+    return companyModel;
   }
 }

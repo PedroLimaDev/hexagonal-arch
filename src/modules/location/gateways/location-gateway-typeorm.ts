@@ -1,10 +1,11 @@
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LocationGatewayInterface } from './location-gateway-interface';
+
 import { LocationModel } from '../entities/location.model';
 import { Location } from '../entities/location.entity';
-import { Repository } from 'typeorm';
+import { LocationGatewayInterface } from './location-gateway-interface';
 
-export class UserGatewayTypeorm implements LocationGatewayInterface {
+export class LocationGatewayTypeorm implements LocationGatewayInterface {
   constructor(
     @InjectRepository(LocationModel)
     private locationModel: Repository<LocationModel>,
@@ -17,17 +18,16 @@ export class UserGatewayTypeorm implements LocationGatewayInterface {
   }
 
   async findAll(): Promise<Location[]> {
-    const locationsModels = await this.locationModel.find();
-    return locationsModels.map(
-      (locationModel) => new Location(locationModel.name, locationModel.id),
-    );
+    return await this.locationModel.find();
   }
 
   async findById(id: string): Promise<Location> {
     const locationModel = await this.locationModel.findOne({ where: { id } });
+
     if (!locationModel) {
       throw new Error('Location not found');
     }
-    return new Location(locationModel.name, locationModel.id);
+
+    return locationModel;
   }
 }

@@ -12,7 +12,11 @@ export class CompanyService {
   ) {}
 
   async create(createCompanyDto: CreateCompanyDto) {
-    const company = new Company(createCompanyDto.name);
+    const company = new Company(
+      createCompanyDto.name,
+      createCompanyDto.website,
+      createCompanyDto.cnpj,
+    );
     await this.companyPersistenceGateway.create(company);
     return company;
   }
@@ -21,8 +25,8 @@ export class CompanyService {
     return this.companyPersistenceGateway.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} company`;
+  findOne(id: string) {
+    return this.companyPersistenceGateway.findById(id);
   }
 
   update(id: number, updateCompanyDto: UpdateCompanyDto) {

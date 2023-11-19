@@ -12,14 +12,16 @@ export class UsersService {
   constructor(
     @Inject('UserPersistenceGateway')
     private userPersistenceGateway: UserGatewayInterface,
-    @Inject('EventEmitter')
-    private eventEmitter: EventEmitter,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const user = new User(createUserDto.name);
+    const user = new User(
+      createUserDto.name,
+      createUserDto.email,
+      createUserDto.password,
+    );
+
     await this.userPersistenceGateway.create(user);
-    this.eventEmitter.emit('user.created', new UserCreatedEvent(user));
     return user;
   }
 

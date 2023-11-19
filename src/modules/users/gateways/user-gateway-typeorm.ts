@@ -16,10 +16,7 @@ export class UserGatewayTypeorm implements UserGatewayInterface {
   }
 
   async findAll(): Promise<User[]> {
-    const usersModels = await this.userModel.find();
-    return usersModels.map(
-      (userModel) => new User(userModel.name, userModel.id),
-    );
+    return await this.userModel.find();
   }
 
   async findById(id: string): Promise<User> {
@@ -27,6 +24,6 @@ export class UserGatewayTypeorm implements UserGatewayInterface {
     if (!userModel) {
       throw new Error('User not found');
     }
-    return new User(userModel.name, userModel.id);
+    return userModel;
   }
 }
